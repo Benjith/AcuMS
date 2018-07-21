@@ -5,6 +5,7 @@ var path = require('path');
 const dashboard = require('./controllers/dashboard');
 var login = require('./controllers/login');
 var company = require('./controllers/company');
+var users=require('./controllers/users');
 var Net=require('net');
 var server = express();
 var router = express.Router();
@@ -28,6 +29,7 @@ server.use('/', router);
 login(router);
 dashboard(router);
 company(router);
+users(router);
 router.get('/', function (req, res, next) {
     res.redirect('/dashboard');
 });
