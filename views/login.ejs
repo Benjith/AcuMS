@@ -158,6 +158,10 @@
         })();
 
         $(document).ready(function () {
+            <% if(message!=''){ %>
+                toastr['warning']('Invalid username or password');
+                $('#validationCustomUsername').focus();
+            <% } %>
             $('#validationCustomUsername').focus();
         });
     </script>

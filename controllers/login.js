@@ -2,9 +2,11 @@ var mysql = require('mysql');
 var DbConnection = require('../general/dbconn');
 module.exports = (app) => {
     app.get('/login', (req, res, next) => {
-        // req.session.destroy();
+        req.session.destroy();
         console.log('LOGIN_GET');
-        res.render('login');
+        res.render('login',{
+            message:""
+        });
         res.end();
     });
     app.post('/login', (req, res, next) => {
@@ -27,7 +29,10 @@ module.exports = (app) => {
                             // next();
                         });
                     });
-                }
+                } else
+                    res.render('login', {
+                        message:"Invalid username or password"
+                    });
             });
             db_conn.conn.end();
         } catch (Error) {
