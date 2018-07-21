@@ -1,31 +1,33 @@
 const express = require('express');
 const session = require('express-session');
+var bodyParser = require('body-parser');
+var path = require('path');
 const dashboard = require('./controllers/dashboard');
 var login = require('./controllers/login');
 var server = express();
+var router = express.Router();
 
+server.set('views', path.join(__dirname, 'views'));
 server.set('view engine', 'ejs');
 server.use('/assets', express.static('assets'));
 server.use(session({
-    secret: 'acums_undefined',
+    secret: 'acums undefined',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        secure: true
-    }
 }));
 
-login(server);
-var sess;
-server.get('*', function (req, res) {
-    sess = req.session;
-    //Session set when user Request our app via URL
-    if (sess.email) {
-        next();
-    } else {
-        res.redirect('/login');
-    }
-});
-dashboard(server);
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-server.listen(8011);
+server.use('/', router);
+
+login(router);
+dashboard(router);
+var sess;
+router.get('/', function (req, res, next) {
+    res.redirect('/dashboard');
+});
+
+server.listen(1101);

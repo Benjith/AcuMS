@@ -1,6 +1,8 @@
 module.exports = (app) => {
     app.get('/dashboard', (req, res, next) => {
-        res.render('dashboard');
-        next();
+        console.log("DASH_RENDER");
+        res.render('dashboard', {
+            request: req
+        });
     });
 };
