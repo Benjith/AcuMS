@@ -4,6 +4,8 @@ var bodyParser = require('body-parser');
 var path = require('path');
 const dashboard = require('./controllers/dashboard');
 var login = require('./controllers/login');
+var company = require('./controllers/company');
+var Net=require('net');
 var server = express();
 var router = express.Router();
 
@@ -25,9 +27,9 @@ server.use('/', router);
 
 login(router);
 dashboard(router);
-var sess;
+company(router);
 router.get('/', function (req, res, next) {
     res.redirect('/dashboard');
 });
 
-server.listen(1104);
+server.listen('3000');

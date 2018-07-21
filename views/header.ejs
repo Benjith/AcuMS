@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon.png">
-    <title>RajaRajweshwari Billing Software</title>
+    <title>AcuMS</title>
     <!-- Custom CSS -->
     <!-- <link href="/assets/libs/chartist/dist/chartist.min.css" rel="stylesheet"> -->
     <link href="/assets/extra-libs/c3/c3.min.css" rel="stylesheet">
@@ -55,7 +55,7 @@
                         <!-- ============================================================== -->
                         <!-- Logo -->
                         <!-- ============================================================== -->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand" href="/dashboard">
                             <!-- Logo icon -->
                             <b class="logo-icon">
                                 <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -113,80 +113,6 @@
                             <!-- ============================================================== -->
                             <!-- Comment -->
                             <!-- ============================================================== -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-bell font-24"></i>
-
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
-                                    <span class="with-arrow">
-                                        <span class="bg-primary"></span>
-                                    </span>
-                                    <ul class="list-style-none">
-                                        <li>
-                                            <div class="drop-title bg-primary text-white">
-                                                <h4 class="m-b-0 m-t-5">4 New                                                 
-                                                </h4>
-                                                <span class="font-light">Notifications</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="message-center notifications">
-                                                <!-- Message -->
-                                                <a href="javascript:void(0)" class="message-item">
-                                                    <span class="btn btn-danger btn-circle">
-                                                        <i class="fa fa-link"></i>
-                                                    </span>
-                                                    <div class="mail-contnet">
-                                                        <h5 class="message-title">Luanch Admin</h5>
-                                                        <span class="mail-desc">Just see the my new admin!</span>
-                                                        <span class="time">9:30 AM</span>
-                                                    </div>
-                                                </a>
-                                                <!-- Message -->
-                                                <a href="javascript:void(0)" class="message-item">
-                                                    <span class="btn btn-success btn-circle">
-                                                        <i class="ti-calendar"></i>
-                                                    </span>
-                                                    <div class="mail-contnet">
-                                                        <h5 class="message-title">Event today</h5>
-                                                        <span class="mail-desc">Just a reminder that you have event</span>
-                                                        <span class="time">9:10 AM</span>
-                                                    </div>
-                                                </a>
-                                                <!-- Message -->
-                                                <a href="javascript:void(0)" class="message-item">
-                                                    <span class="btn btn-info btn-circle">
-                                                        <i class="ti-settings"></i>
-                                                    </span>
-                                                    <div class="mail-contnet">
-                                                        <h5 class="message-title">Settings</h5>
-                                                        <span class="mail-desc">You can customize this template as you want</span>
-                                                        <span class="time">9:08 AM</span>
-                                                    </div>
-                                                </a>
-                                                <!-- Message -->
-                                                <a href="javascript:void(0)" class="message-item">
-                                                    <span class="btn btn-primary btn-circle">
-                                                        <i class="ti-user"></i>
-                                                    </span>
-                                                    <div class="mail-contnet">
-                                                        <h5 class="message-title">Pavan kumar</h5>
-                                                        <span class="mail-desc">Just see the my admin!</span>
-                                                        <span class="time">9:02 AM</span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a class="nav-link text-center m-b-5" href="javascript:void(0);">
-                                                <strong>Check all notifications</strong>
-                                                <i class="fa fa-angle-right"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
                             <!-- ============================================================== -->
                             <!-- End Comment -->
                             <!-- ============================================================== -->
@@ -211,22 +137,14 @@
                                         </div>
                                         <div class="m-l-10">
                                             <h4 class="m-b-0" style="text-transform: capitalize;">
-                                                <?=$data['userName'];?>
+                                                <%= request.session.__fullName %>
                                             </h4>
-                                            <p class=" m-b-0">varun@gmail.com</p>
+                                            <p class=" m-b-0"><%= request.session.__fullName %></p>
                                         </div>
                                     </div>
                                     <a class="dropdown-item" href="javascript:void(0)">
                                         <i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
-                                        <i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
-                                        <i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="javascript:void(0)">
-                                        <i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="/login">
                                         <i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
                                     <div class="dropdown-divider"></div>
 
@@ -242,43 +160,58 @@
             <!-- ============================================================== -->
             <!-- End Topbar header -->
             <!-- ============================================================== -->
+
             <!-- ============================================================== -->
             <!-- Left Sidebar - style you can find in sidebar.scss  -->
             <!-- ============================================================== -->
             <aside class="left-sidebar">
-                <!-- Sidebar scroll-->
-                <div class="scroll-sidebar">
-                    <!-- Sidebar navigation-->
-                    <nav class="sidebar-nav">
-                        <ul id="sidebarnav">
-                            <!-- User Profile-->
-                            <li class="nav-small-cap">
-                                <i class="mdi mdi-dots-horizontal"></i>
-                                <span class="hide-menu">Personal</span>
-                            </li>
-
-                            <li class="nav-small-cap">
-                                <i class="mdi mdi-dots-horizontal"></i>
-                                <span class="hide-menu">Tables</span>
-                            </li>
-
-                            <li class="nav-small-cap">
-                                <i class="mdi mdi-dots-horizontal"></i>
-                                <span class="hide-menu">Charts</span>
-                            </li>
-
-                            <li class="nav-small-cap">
-                                <i class="mdi mdi-dots-horizontal"></i>
-                                <span class="hide-menu">Sample Pages</span>
-                            </li>
-
-
-                        </ul>
-                    </nav>
-                    <!-- End Sidebar navigation -->
-                </div>
-                <!-- End Sidebar scroll-->
-            </aside>
+                    <!-- Sidebar scroll-->
+                    <div class="scroll-sidebar">
+                        <!-- Sidebar navigation-->
+                        <nav class="sidebar-nav">
+                            <ul id="sidebarnav">
+                                <!-- User Profile-->
+                                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Personal</span></li>
+                                
+                                <li class="sidebar-item"> <a href="/company" class="sidebar-link waves-effect waves-dark" aria-expanded="false"><i class="mdi mdi-hospital-building"></i><span class="hide-menu">Clinic </span></a></li>
+                                <li class="sidebar-item"> <a class="sidebar-link  waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Users </span></a>
+                                    <ul aria-expanded="false" class="collapse  first-level">
+                                        <li class="sidebar-item"><a href="" class="sidebar-link"><i class=""></i><span class="hide-menu"> Add </span></a></li>
+                                        <li class="sidebar-item"><a href="" class="sidebar-link"><i class=""></i><span class="hide-menu"> View All </span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="sidebar-item"> <a class="sidebar-link  waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-tie"></i><span class="hide-menu">Doctors </span></a>
+                                    <ul aria-expanded="false" class="collapse  first-level">
+                                        <li class="sidebar-item"><a href="" class="sidebar-link"><i class=""></i><span class="hide-menu"> Add </span></a></li>
+                                        <li class="sidebar-item"><a href="" class="sidebar-link"><i class=""></i><span class="hide-menu"> View All </span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="sidebar-item"> <a class="sidebar-link  waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-card-details"></i><span class="hide-menu">Patients </span></a>
+                                    <ul aria-expanded="false" class="collapse  first-level">
+                                        <li class="sidebar-item"><a href="" class="sidebar-link"><i class=""></i><span class="hide-menu"> Add </span></a></li>
+                                        <li class="sidebar-item"><a href="" class="sidebar-link"><i class=""></i><span class="hide-menu"> View All </span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="sidebar-item"> <a class="sidebar-link  waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-folder-multiple"></i><span class="hide-menu">Patient Directory </span></a></li>
+                                <li class="sidebar-item"> <a class="sidebar-link  waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-stethoscope"></i><span class="hide-menu">Diagnosis </span></a>
+                                    <ul aria-expanded="false" class="collapse  first-level">
+                                        <li class="sidebar-item"><a href="" class="sidebar-link"><i class=""></i><span class="hide-menu"> Add </span></a></li>
+                                        <li class="sidebar-item"><a href="" class="sidebar-link"><i class=""></i><span class="hide-menu"> View All </span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Tables</span></li>
+                               
+                                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Charts</span></li>
+                                
+                                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Sample Pages</span></li>
+                                
+                               
+                            </ul>
+                        </nav>
+                        <!-- End Sidebar navigation -->
+                    </div>
+                    <!-- End Sidebar scroll-->
+                </aside>
             <!-- ============================================================== -->
             <!-- End Left Sidebar - style you can find in sidebar.scss  -->
             <!-- ============================================================== -->
