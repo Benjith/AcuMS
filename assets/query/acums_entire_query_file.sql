@@ -22,4 +22,18 @@ create TABLE user_tbl(
     entryDate datetime default CURRENT_TIMESTAMP
 );
 
+create table doctor_tbl(
+    doctorId int primary key AUTO_INCREMENT,
+    fullName varchar(100),
+    address varchar(500),
+    email varchar(200),
+    mobile varchar(50),
+    licenceNo varchar(100),
+    specialization varchar(100),
+    category varchar(100),
+    serviceCharge decimal(18,2),
+    description varchar(500),
+    entryDate datetime
+);
 
+ALTER TABLE doctor_tbl add companyId int REFERENCES company_tbl(companyId);

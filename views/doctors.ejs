@@ -1,0 +1,266 @@
+<% include header %>
+
+    <section class="container-fluid col-md-8">
+        <div class="card ">
+            <div class="card-body">
+                <h4 class="card-title">Doctors</h4>
+                <div class="card-body">
+                    <div class="tab-container">
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#addnew" role="tab" id="navNew">Add New</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#list" role="tab" id="navList">List</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active fade show" id="list" name="list" role="tabpanel">
+                            <br>
+                            <div class="table-responsive table-hover" id="tblData" name="tblData">
+                                <table id="data-table" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Full Name</th>
+                                            <th>Mobile</th>
+                                            <th>Specialisation</th>
+                                            <th>Category</th>
+                                            <th>Service Charge</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%
+                                            for(var i=0; i<Object.keys(gridData).length; i++) { %>
+                                            <tr>
+                                                <th scope="row">
+                                                    <%= i+1; %>
+                                                </th>
+                                                <td>
+                                                    <%= gridData[i].fullName; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].mobile; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].specialization; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].category; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].serviceCharge; %>
+                                                </td>
+                                                <td>
+                                                    <i class="mdi mdi-pencil" style="cursor:pointer;" onclick='doctorEdit(<%= gridData[i].doctorId %>)'>
+                                                    </i>/
+                                                    <i class="mdi mdi-delete" style="cursor:pointer;" onclick="doctorDelete(<%= gridData[i].doctorId %>)">
+                                                    </i>
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="addnew" role="tabpanel">
+                            <br>
+                            <form action="/doctors" method="post" id="frmData">
+                                <input type="hidden" name="doctorId" id="doctorId" value="0">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="" class="control-label">Full Name</label>
+                                        <div class="form-group">
+                                            <input type="text" name="fullName" id="fullName" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="" class="control-label">Email</label>
+                                        <div class="form-group">
+                                            <input type="text" name="email" id="email" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="" class="control-label">Address</label>
+                                        <div class="form-group">
+                                            <textarea name="address" id="address" rows="3" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="" class="control-label">Mobile</label>
+                                        <div class="form-group">
+                                            <input type="text" name="mobile" id="mobile" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="control-label">Licence No </label>
+                                        <div class="form-group">
+                                            <input type="text" name="licenceNo" id="licenceNo" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="" class="control-label">Service Charge </label>
+                                        <div class="form-group">
+                                            <input type="text" name="serviceCharge" id="serviceCharge" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="" class="control-label">Specialization</label>
+                                        <div class="form-group">
+                                            <select name="specialization" id="specialization" style="width:100%;">
+                                                <option value="">--Select--</option>
+                                                <%Object.keys(specSelect).forEach((i)=>{%>
+                                                    <option value="<%=specSelect[i].specialization%>">
+                                                        <%=specSelect[i].specialization%>
+                                                    </option>
+                                                    <%});%>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="" class="control-label">Category</label>
+                                        <div class="form-group">
+                                            <select name="category" id="category" style="width:100%;">
+                                                <option value="">--Select--</option>
+                                                <%Object.keys(catSelect).forEach((i)=>{%>
+                                                    <option value="<%=catSelect[i].category%>">
+                                                        <%=catSelect[i].category%>
+                                                    </option>
+                                                    <%});%>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="" class="control-label">Description</label>
+                                        <div class="form-group">
+                                            <textarea name="description" id="description" rows="3" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="button" value="Save" id="btnSave" name="btnSave" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <% include footer %>
+        </body>
+
+        <script>
+            $(document).ready(function () {
+                $('#fullName').focus();
+                $('#data-table').DataTable();
+                $('#specialization').select2({
+                    tags: true
+                });
+                $('#category').select2({
+                    tags: true
+                });
+            });
+            $('#btnSave').click(function () {
+                if ($('#fullName').val() == "") {
+                    toastr['warning']('Enter full name of the doctor');
+                    $('#fullName').focus();
+                } else {
+                    var frmData = $('#frmData').serializeArray();
+                    $.post('/doctors', frmData, function (resp) {
+                        if ($('#doctorId').val() == 0) {
+                            swal({
+                                title: 'Doctors',
+                                text: 'Saved successfully',
+                                type: 'success',
+                                showConfirmButton: false
+                            });
+                            setTimeout(function () {
+                                location.reload();
+                            }, 1000);
+                        } else if ($('#doctorId').val() > 0) {
+                            swal({
+                                title: 'Doctors',
+                                text: 'Updated successfully',
+                                type: 'success',
+                                showConfirmButton: false
+                            });
+                            setTimeout(function () {
+                                location.reload();
+                            }, 1000);
+                        }
+                    });
+                }
+            });
+
+            function doctorEdit(id) {
+                $.post('/doctorViewById', {
+                    doctorId: id
+                }, function (resp) {
+                    if (resp) {
+                        $('#myTab a:first').tab('show');
+                        $('#fullName').val(resp.fullName);
+                        $('#email').val(resp.email);
+                        $('#mobile').val(resp.mobile);
+                        $('#address').html(resp.address);
+                        $('#licenceNo').val(resp.licenceNo);
+                        $('#specialization').val(resp.specialization).trigger('change');
+                        $('#category').val(resp.category).trigger('change');
+                        $('#serviceCharge').val(resp.serviceCharge);
+                        $('#description').val(resp.description);
+                        $('#btnSave').val('Update');
+                        $("#doctorId").val(resp.doctorId);
+                        $('#fullName').focus();
+                    }
+                });
+            }
+
+            function doctorDelete(id) {
+                swal({
+                    title: 'Are you sure?',
+                    text: 'This doctor\'s record will be deleted!',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'rgb(221, 51, 51)',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonClass: 'swal2-cancel swal2-styled'
+                }).then((result) => {
+                    if (result.value) {
+                        $.post('/doctorDeleteById', {
+                            doctorId: id
+                        }, function (response) {
+                            if (response) {
+                                swal({
+                                    title: 'Doctors',
+                                    text: 'Deleted successfully',
+                                    type: 'success',
+                                    showConfirmButton: false
+                                });
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1000);
+                            }
+                        });
+                    }
+                });
+            }
+        </script>
+
+        </html>

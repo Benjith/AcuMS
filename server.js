@@ -6,6 +6,7 @@ const dashboard = require('./controllers/dashboard');
 var login = require('./controllers/login');
 var company = require('./controllers/company');
 var users=require('./controllers/users');
+var doctors=require('./controllers/doctors');
 var Net=require('net');
 var server = express();
 var router = express.Router();
@@ -30,6 +31,7 @@ login(router);
 dashboard(router);
 company(router);
 users(router);
+doctors(router);
 router.get('/', function (req, res, next) {
     res.redirect('/dashboard');
 });

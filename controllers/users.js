@@ -16,6 +16,7 @@ module.exports = (app) => {
                         gridData: []
                     });
             });
+            db_conn.conn.end();
         } catch (Error) {
             throw Error;
         }
@@ -54,6 +55,7 @@ module.exports = (app) => {
                     res.send(result[0]);
                 }
             });
+            db_conn.conn.end();
         } catch (Error) {
             console.log(Error);
         }
@@ -67,6 +69,7 @@ module.exports = (app) => {
                 if (err) throw err;
                 res.json('deleted');
             });
+            db_conn.conn.end();
         } catch (Error) {
             throw Error;
         }
