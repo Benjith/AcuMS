@@ -9,17 +9,15 @@ module.exports = (app) => {
             db_conn.conn.query('select distinct specialization from doctor_tbl', (err, result) => {
                 if (err) throw err;
                 if (Object.keys(result).length > 0) {
-                    specSelect=result;                    
-                    console.log("SPEC:"+JSON.stringify(specSelect));
+                    specSelect = result;
                 }
             });
             db_conn.conn.query('select distinct category from doctor_tbl', (err, result) => {
                 if (err) throw err;
                 if (Object.keys(result).length > 0) {
-                    catSelect=result;
-                    console.log("CAT:"+JSON.stringify(catSelect));
+                    catSelect = result;
                 }
-            });                                        
+            });
             db_conn.conn.query('select * from doctor_tbl order by doctorId desc', (err, result) => {
                 if (err) throw err;
                 if (Object.keys(result).length > 0) {
@@ -27,14 +25,14 @@ module.exports = (app) => {
                         request: req,
                         gridData: result,
                         specSelect: specSelect,
-                        catSelect:catSelect
+                        catSelect: catSelect
                     });
                 } else
                     res.render('doctors', {
                         request: req,
                         gridData: [],
                         specSelect: specSelect,
-                        catSelect:catSelect
+                        catSelect: catSelect
                     });
             });
             db_conn.conn.end();
@@ -48,13 +46,12 @@ module.exports = (app) => {
             let db_conn = new DbConnection();
             if (info.doctorId == 0) {
                 db_conn.conn.query('insert into doctor_tbl(companyId,fullName,address,email,mobile,licenceNo,specialization,category,serviceCharge,description)values(?,?,?,?,?,?,?,?,?,?)', [req.session.__companyId, info.fullName, info.address, info.email, info.mobile, info.licenceNo, info.specialization, info.category, info.serviceCharge, info.description], (err, result) => {
-                    console.log("DOCTOR_ADDED");
+                    if (err) throw err;
                 });
                 db_conn.conn.end();
             } else if (info.doctorId > 0) {
                 db_conn.conn.query('update doctor_tbl set companyId=?,fullName=?,address=?, email=?,mobile=?, licenceNo=?, specialization=?, category=?, serviceCharge=?, description=? where doctorId=?', [req.session.__companyId, info.fullName, info.address, info.email, info.mobile, info.licenceNo, info.specialization, info.category, info.serviceCharge, info.description, info.doctorId], (err, result) => {
                     if (err) throw err;
-                    console.log("DOCTOR_UPDATED");
                 });
                 db_conn.conn.end();
             }

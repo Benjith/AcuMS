@@ -21,21 +21,32 @@ module.exports = (app) => {
             throw Error;
         }
     });
+    app.get('/user/:id', (req, res) => {
+        try {
+            let db_conn = new DbConnection();
+            db_conn.conn.query('select * from user_tbl where userId=?', [req.params.id], (err, result) => {
+                res.render('changePassword', {
+                    request: req,
+                    userInfo: result[0]
+                });
+            });
+            db_conn.conn.end();
+        } catch (Error) {
+            throw Error;
+        }
+    });    
     app.post('/users', (req, res) => {
         try {
             var info = trimObj(req.body);
             let db_conn = new DbConnection();
             if (info.userId == 0) {
                 db_conn.conn.query('insert into user_tbl(companyId,fullName,email,mobile,userType,userName,password,isActive)values(?,?,?,?,?,?,?,?)', [req.session.__companyId, info.fullName, info.email, info.mobile, info.userType, info.userName, info.password, info.isActive], (err, result) => {
-                    console.log("USER_ADDED");
+                    if(err)throw err;
                 });
                 db_conn.conn.end();
             } else if (info.userId > 0) {
-                console.log("sdf" + info.isActive);
-
                 db_conn.conn.query('update user_tbl set companyId=?,fullName=?,email=?, mobile=?, userType=?, userName=?, password=?, isActive=? where userId=?', [req.session.__companyId, info.fullName, info.email, info.mobile, info.userType, info.userName, info.password, info.isActive, info.userId], (err, result) => {
                     if (err) throw err;
-                    console.log("USER_UPDATED");
                 });
                 db_conn.conn.end();
             }
@@ -44,7 +55,6 @@ module.exports = (app) => {
             throw Error;
         }
     });
-
     app.post('/userViewById', (req, res) => {
         try {
             var info = trimObj(req.body);

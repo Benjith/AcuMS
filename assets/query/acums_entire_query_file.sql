@@ -6,7 +6,7 @@ create table company_tbl(
     phone varchar(50),
     mobile varchar(50),
     description varchar(500),
-    entryDate datetime DEFAULT CURRENT_TIMESTAMP()
+    entryDate datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 create TABLE user_tbl(
@@ -24,6 +24,7 @@ create TABLE user_tbl(
 
 create table doctor_tbl(
     doctorId int primary key AUTO_INCREMENT,
+    companyId int references company_tbl(companyId),
     fullName varchar(100),
     address varchar(500),
     email varchar(200),
@@ -33,7 +34,35 @@ create table doctor_tbl(
     category varchar(100),
     serviceCharge decimal(18,2),
     description varchar(500),
-    entryDate datetime
+    entryDate datetime DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE doctor_tbl add companyId int REFERENCES company_tbl(companyId);
+create table patient_tbl(
+    patientId int primary key AUTO_INCREMENT,
+    companyId int REFERENCES company_tbl(companyId),
+    patientCode varchar(15),
+    patientName varchar(100),
+    mobile varchar(50),
+    age varchar(5),
+    place varchar(100),
+    address varchar(500),
+    email varchar(200),
+    entryDate datetime default CURRENT_TIMESTAMP
+);
+
+
+create table diagnosis_tbl(
+	diagnosisId int primary key AUTO_INCREMENT,
+    companyId int REFERENCES company_tbl(companyId),
+    prefix varchar(10) default 'DG',
+    diagnosisCode int,
+    diagnosisDate date,
+    patientId int references patient_tbl(patientId),
+    doctorId int REFERENCES doctor_tbl(doctorId),
+	diagnosisDetails varchar(1000),
+    medicineDetails varchar(1000),
+    accupunctureChannel varchar(200),
+    status varchar(50),--Booked, Open, Closed
+    description varchar(500),
+    entryDate datetime default CURRENT_TIMESTAMP
+);

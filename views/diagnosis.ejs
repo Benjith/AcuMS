@@ -1,0 +1,513 @@
+<% include header %>
+
+    <section class="container-fluid">
+        <div class="card ">
+            <div class="card-body">
+                <h4 class="card-title">Diagnosis</h4>
+                <div class="card-body">
+                    <div class="tab-container">
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#addnew" role="tab" id="navNew">Add New</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#list" role="tab" id="navList">List</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active fade show" id="list" name="list" role="tabpanel">
+                            <br>
+                            <div class="table-responsive table-hover" id="tblData" name="tblData">
+                                <table id="data-table" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Patient</th>
+                                            <th>No</th>
+                                            <th>Age</th>
+                                            <th>Mobile</th>
+                                            <th>Place</th>
+                                            <th>No(Diag)</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%
+                                                for(var i=0; i<Object.keys(gridData).length; i++) { %>
+                                            <tr>
+                                                <th scope="row">
+                                                    <%= i+1; %>
+                                                </th>
+                                                <td>
+                                                    <%= gridData[i].patientName; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].patientCode; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].age; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].mobile; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].place; %>
+                                                </td>
+                                                <td>
+                                                    <%= gridData[i].diagCount; %>
+                                                </td>
+                                                <td>
+                                                    <i class="mdi mdi-pencil" style="cursor:pointer;" onclick='patientEdit(<%= gridData[i].patientId %>)'>
+                                                    </i>/
+                                                    <i class="mdi mdi-delete" style="cursor:pointer;" onclick="patientDelete(<%= gridData[i].patientId %>)">
+                                                    </i>
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="addnew" role="tabpanel">
+                            <form action="/diagnosis" method="post" id="frmData">
+                                <input type="hidden" name="patientId" id="patientId" value="0">
+                                <input type="hidden" name="diagnosisId" id="diagnosisId" value="0">
+                                <div class="card-body">
+                                    <h5 class="card-title">Patient Info:-</h5>
+                                    <div class="clearfix">&nbsp;</div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Patient No</label>
+                                            <div class="form-group">
+                                                <input type="text" name="patientCode" id="patientCode" class="form-control" readonly value="PT/####">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Name </label>
+                                            <div class="form-group">
+                                                <input type="text" name="patientName" id="patientName" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Age </label>
+                                            <div class="form-group">
+                                                <input type="text" name="age" id="age" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Place</label>
+                                            <div class="form-group">
+                                                <input type="text" name="place" id="place" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Email </label>
+                                            <div class="form-group">
+                                                <input type="text" name="email" id="email" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Mobile </label>
+                                            <div class="form-group">
+                                                <input type="text" name="mobile" id="mobile" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="" class="control-label">Address</label>
+                                            <div class="form-group">
+                                                <textarea name="address" id="address" rows="2" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-11">
+                                            &nbsp;
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="button" value="Save" id="btnSave" name="btnSave" class="btn btn-primary" style="float:right;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="card-body">
+                                    <h5 class="card-title">Diagnosis Info :-</h5>
+                                    <br>
+                                    <div class="row">
+                                        <div class="table-responsive table-hover" id="tblData" name="tblData">
+                                            <table id="diagData" class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5%">#</th>
+                                                        <th width="7%">Code</th>
+                                                        <th width="10%">Date</th>
+                                                        <th width="30%">Diagnosis Details</th>
+                                                        <th width="20%">Medicine Details</th>
+                                                        <th width="20%">Accupuncture Channel</th>
+                                                        <th width="20%">Doctor</th>
+                                                        <th width="5%">Status</th>
+                                                        <th width="5%">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <hr>
+                                    <h5>New Diagnosis :-</h5>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Diagnosis No</label>
+                                            <div class="form-group">
+                                                <input type="text" name="diagnosisCode" id="diagnosisCode" class="form-control" readonly value="DG/####">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Date </label>
+                                            <div class="form-group">
+                                                <input type="date" name="diagnosisDate" id="diagnosisDate" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Doctor </label>
+                                            <div class="form-group">
+                                                <select name="doctorId" id="doctorId" style="width:100%;" class="select2">
+                                                    <option value="0">--Select--</option>
+                                                    <%Object.keys(docSelect).forEach((i)=>{%>
+                                                        <option value="<%=docSelect[i].doctorId%>">
+                                                            <%=docSelect[i].fullName%>
+                                                        </option>
+                                                        <%});%>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Diagnosis Details </label>
+                                            <div class="form-group">
+                                                <textarea name="diagnosisDetails" id="diagnosisDetails" rows="4" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Medicine Details </label>
+                                            <div class="form-group">
+                                                <textarea name="medicineDetails" id="medicineDetails" rows="4" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Accupuncture Channel </label>
+                                            <div class="form-group">
+                                                <textarea name="accupunctureChannel" id="accupunctureChannel" rows="4" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            &nbsp;
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="" class="control-label">Status </label>
+                                            <select name="status" id="status" style="width:100%;">
+                                                <option value="">--Select--</option>
+                                                <%Object.keys(statSelect).forEach((i)=>{%>
+                                                    <option value="<%=statSelect[i].status%>">
+                                                        <%=statSelect[i].status%>
+                                                    </option>
+                                                    <%});%>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">&nbsp;</div>
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            &nbsp;
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="button" value="Add Diagnosis" id="btnSaveDiagnosis" name="btnSaveDiagnosis" class="btn btn-primary" style="float:right;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <% include footer %>
+        <script>
+            $(document).ready(function () {
+                $('#status').select2({
+                    tags: true
+                });
+                $('#diagnosisDate').val(formattedDate(new Date()));
+                $('#data-table').DataTable();
+            });
+            $('#btnSave').click(function () {
+                if ($('#patientName').val() == "") {
+                    toastr['warning']("Enter patient name.");
+                    $('#patientName').focus();
+                } else if ($('#age').val() == "") {
+                    toastr['warning']("Enter age of the patient.");
+                    $('#age').focus();
+                } else if ($('#mobile').val() == "") {
+                    toastr['warning']("Enter contact number.");
+                    $('#mobile').focus();
+                } else {
+                    var msg=$('#patientId').val()==0?"insert":"update";
+                    var title=$('#patientId').val()==0?"Add New":"Edit";
+                    swal({
+                        title: title+' Patient',
+                        text: 'Are you clear to '+msg+' data?',
+                        type: 'info',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, insert',
+                        cancelButtonClass: 'swal2-cancel swal2-styled'
+                    }).then((result) => {
+                        if (result.value) {
+                            var frmData = $('#frmData').serializeArray();
+                            $.post('/addPatient', frmData, function (resp) {
+                                if ($('#patientId').val() == 0) {
+                                    swal({
+                                        title: 'Patient',
+                                        text: 'New patient record created successfully!',
+                                        type: 'success',
+                                        showConfirmButton: true
+                                    }).then((val) => {
+                                        if (val.value) {
+                                            $('#patientCode').val('PT/' + resp.patientCode);
+                                            $('#patientId').val(resp.patientId);
+                                            $('#btnSave').val('Update');
+                                        }
+                                    });
+                                }
+                                else if($('#patientId').val()>0){
+                                    swal({
+                                        title: 'Patient',
+                                        text: 'Patient record updated successfully!',
+                                        type: 'success',
+                                        showConfirmButton: true
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            $('#btnSaveDiagnosis').click(function () {
+                if ($('#patientId').val() == 0) {
+                    toastr['warning']("Please choose/insert patient first.");
+                    $('#patientName').focus();
+                } else {
+                    var msg=$('#diagnosisId').val()==0?"insert":"update";
+                    var title=$('#diagnosisId').val()==0?"New":"Edit";
+                    swal({
+                        title: title+' Diagnosis Info',
+                        text: 'Are you clear to '+msg+' data?',
+                        type: 'info',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, insert',
+                        cancelButtonClass: 'swal2-cancel swal2-styled'
+                    }).then((result) => {
+                        if (result.value) {
+                            var frmData = $('#frmData').serializeArray();
+                            $.post('/addDiagnosis', frmData, function (resp) {
+                                if ($('#diagnosisId').val() == 0) {
+                                    swal({
+                                        title: 'Diagnosis',
+                                        text: 'New diagnosis record inserted successfully!',
+                                        type: 'success',
+                                        showConfirmButton: true
+                                    }).then((val) => {
+                                        if (val.value) {
+                                            $('#diagnosisId').val('');
+                                            $('#diagnosisDate').val(formattedDate(new Date()));
+                                            $('#doctorId').val(0).trigger('change');
+                                            $('#diagnosisDetails').val('');
+                                            $('#medicineDetails').val('');
+                                            $('#accupunctureChannel').val('');
+                                            $('#status').val(0).trigger('change');
+                                            $('#btnSaveDiagnosis').html('Add Diagnosis');                                            
+                                            updateDiagData();
+                                        }
+                                    });
+                                }
+                                else if($('#diagnosisId').val() > 0) {
+                                    swal({
+                                        title: 'Diagnosis',
+                                        text: 'Diagnosis record updated successfully!',
+                                        type: 'success',
+                                        showConfirmButton: true
+                                    }).then((val) => {
+                                        if (val.value) {
+                                            $('#diagnosisId').val('');
+                                            $('#diagnosisDate').val(formattedDate(new Date()));
+                                            $('#doctorId').val(0).trigger('change');
+                                            $('#diagnosisDetails').val('');
+                                            $('#medicineDetails').val('');
+                                            $('#accupunctureChannel').val('');
+                                            $('#status').val(0).trigger('change');
+                                            $('#btnSaveDiagnosis').html('Add Diagnosis');                                            
+                                            updateDiagData();
+                                        }
+                                    });                                                            
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            function patientEdit(patientId) {
+                if (patientId > 0) {
+                    $.post('/patientViewById', {
+                        patientId: patientId
+                    }, function (resp) {                        
+                        $('#patientId').val(resp[0][0].patientId);
+                        $('#patientCode').val('PT/' + resp[0][0].patientCode);
+                        $('#patientName').val(resp[0][0].patientName);
+                        $('#age').val(resp[0][0].age);
+                        $('#place').val(resp[0][0].place);
+                        $('#email').val(resp[0][0].email);
+                        $('#mobile').val(resp[0][0].mobile);
+                        $('#address').val(resp[0][0].address);
+                        $('#btnSave').val('Update');
+
+                        Object.keys(resp[1]).forEach((i)=>{
+                            $('#diagData tbody').append(`<tr>
+                                                        <td>`+ (parseInt(i)+1) +`</td>
+                                                        <td>`+(resp[1][i].prefix+'/'+resp[1][i].diagnosisCode)+`</td>
+                                                        <td>`+formattedDate(new Date(resp[1][i].diagnosisDate))+`</td>
+                                                        <td>`+resp[1][i].diagnosisDetails+`</td>
+                                                        <td>`+resp[1][i].medicineDetails+`</td>
+                                                        <td>`+resp[1][i].accupunctureChannel+`</td>
+                                                        <td>`+(resp[1][i].fullName==null?"":resp[1][i].fullName)+`</td>
+                                                        <td>`+resp[1][i].status+`</td>
+                                                        <td>
+                                                            <i class="mdi mdi-pencil" style="cursor:pointer;" onclick='diagnosisEdit(`+resp[1][i].diagnosisId+`)'></i>/
+                                                            <i class="mdi mdi-delete" style="cursor:pointer;" onclick="diagnosisDelete(`+resp[1][i].diagnosisId+`)"></i>
+                                                        </td>
+                                                    </tr>`);
+                        });
+
+                        $('#myTab a:first').tab('show');
+                    });
+                }
+            }
+            function diagnosisEdit(diagnosisId){
+                $.post('/diagnosisViewById',{diagnosisId:diagnosisId},function(resp){
+                    $('#diagnosisCode').val(resp.prefix+"/"+resp.diagnosisCode);
+                    $('#diagnosisDate').val(formattedDate(new Date(resp.diagnosisDate)));
+                    $('#doctorId').val(resp.doctorId==null?0:resp.doctorId).trigger('change');
+                    $('#diagnosisDetails').val(resp.diagnosisDetails);
+                    $('#medicineDetails').val(resp.medicineDetails);
+                    $('#accupunctureChannel').val(resp.accupunctureChannel);
+                    $('#status').val(resp.status?resp.status:0).trigger('change');
+                    $('#btnSaveDiagnosis').val('Edit Diagnosis');
+                    $('#diagnosisId').val(resp.diagnosisId);
+                });
+            }
+            $('#navList').click(function () {
+                if ($('#patientId').val() > 0) {
+                    location.reload();
+                }
+            });
+            function patientDelete(patientId){
+                swal({
+                    title: 'Are you sure?',
+                    text: 'The entire record of this patient will be deleted!',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'rgb(221, 51, 51)',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonClass: 'swal2-cancel swal2-styled'
+                }).then((result) => {
+                    if(result.value){
+                        $.post('/patientDeleteById',{patientId:patientId},function(resp){
+                            swal({
+                                title: 'Patient',
+                                text: 'A patient record has been deleted!',
+                                type: 'success',
+                                showConfirmButton: false
+                            });
+                            setTimeout(function(){
+                                location.reload();
+                            },1000);
+                        });
+                    }
+                });                
+            }
+            function diagnosisDelete(diagnosisId){
+                swal({
+                    title: 'Are you sure?',
+                    text: 'The entire record of this diagnosis will be lost!',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'rgb(221, 51, 51)',
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonClass: 'swal2-cancel swal2-styled'
+                }).then((result) => {
+                    if(result.value){
+                        if($('#diagnosisId').val()>0){
+                            swal({
+                                title: 'Diagnosis',
+                                text: 'Cannot delete record while editing another.',
+                                type: 'error',
+                                showConfirmButton: true
+                            });                            
+                        }
+                        else{
+                            $.post('/diagnosisDeleteById',{diagnosisId:diagnosisId},function(resp){
+                                swal({
+                                    title: 'Diagnosis',
+                                    text: 'A diagnosis record has been deleted!',
+                                    type: 'success',
+                                    showConfirmButton: true
+                                });                            
+                                updateDiagData();                            
+                            });
+                        }
+                    }
+                });                
+            }
+
+            function updateDiagData(){
+                $.post('/patientViewById', {
+                    patientId: $('#patientId').val()
+                }, function (resp) {                       
+                    $('#diagData tbody tr').remove();
+                    Object.keys(resp[1]).forEach((i)=>{
+                        $('#diagData tbody').append(
+                        `<tr>
+                            <td>`+(parseInt(i)+1)+`</td>
+                            <td>`+(resp[1][i].prefix+'/'+resp[1][i].diagnosisCode)+`</td>
+                            <td>`+formattedDate(new Date(resp[1][i].diagnosisDate))+`</td>
+                            <td>`+resp[1][i].diagnosisDetails+`</td>
+                            <td>`+resp[1][i].medicineDetails+`</td>
+                            <td>`+resp[1][i].accupunctureChannel+`</td>
+                            <td>`+(resp[1][i].fullName==null?"":resp[1][i].fullName)+`</td>
+                            <td>`+resp[1][i].status+`</td>
+                            <td>
+                                <i class="mdi mdi-pencil" style="cursor:pointer;" onclick='diagnosisEdit(`+resp[1][i].diagnosisId+`)'></i>/
+                                <i class="mdi mdi-delete" style="cursor:pointer;" onclick="diagnosisDelete(`+resp[1][i].diagnosisId+`)"></i>
+                            </td>
+                        </tr>`);
+                    });
+                });                                
+            }
+        </script>
+        </body>
+
+        </html>

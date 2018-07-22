@@ -3,7 +3,6 @@ var DbConnection = require('../general/dbconn');
 module.exports = (app) => {
     app.get('/login', (req, res, next) => {
         req.session.destroy();
-        console.log('LOGIN_GET');
         res.render('login', {
             message: ""
         });
@@ -11,7 +10,6 @@ module.exports = (app) => {
     });
     app.post('/login', (req, res, next) => {
         try {
-            console.log("LOGIN_POST");
             userName = req.body.userName;
             password = req.body.password;
 
@@ -26,7 +24,6 @@ module.exports = (app) => {
                         req.session.__email = row.email;
                         req.session.__companyId=row.companyId;
                         req.session.save((err) => {
-                            console.log("LOGGED");
                             res.redirect('/dashboard');
                         });
                     });

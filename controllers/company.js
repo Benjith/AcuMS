@@ -28,7 +28,7 @@ module.exports = (app) => {
             var info = trimObj(req.body);
             let db_conn = new DbConnection();
             db_conn.conn.query('update company_tbl set companyName=?,city=?,email=?,phone=?,mobile=?,description=? where companyId=?', [info.companyName, info.city, info.email, info.phone, info.mobile, info.description, req.session.__companyId], (err, result) => {
-                console.log("COMPANY_UPADTED");
+                if(err)throw err;
             });
             db_conn.conn.end();
             res.json('success:true;');
