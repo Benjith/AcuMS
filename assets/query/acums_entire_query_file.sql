@@ -66,3 +66,5 @@ create table diagnosis_tbl(
     description varchar(500),
     entryDate datetime default CURRENT_TIMESTAMP
 );
+
+alter table patient_tbl add patientCodeOld varchar(15);

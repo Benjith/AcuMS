@@ -25,6 +25,7 @@
                                             <th>#</th>
                                             <th>Patient</th>
                                             <th>No</th>
+                                            <th>Old No</th>
                                             <th>Age</th>
                                             <th>Mobile</th>
                                             <th>Place</th>
@@ -36,31 +37,35 @@
                                         <%
                                                 for(var i=0; i<Object.keys(gridData).length; i++) { %>
                                             <tr>
-                                                <th scope="row">
+                                                <th scope="row" class="clickableRow">
                                                     <%= i+1; %>
                                                 </th>
-                                                <td>
+                                                <td class="clickableRow">
                                                     <%= gridData[i].patientName; %>
                                                 </td>
-                                                <td>
+                                                <td class="clickableRow">
                                                     <%= gridData[i].patientCode; %>
                                                 </td>
-                                                <td>
+                                                <td class="clickableRow">
+                                                    <%= gridData[i].patientCodeOld; %>
+                                                </td>
+                                                <td class="clickableRow">
                                                     <%= gridData[i].age; %>
                                                 </td>
-                                                <td>
+                                                <td class="clickableRow">
                                                     <%= gridData[i].mobile; %>
                                                 </td>
-                                                <td>
+                                                <td class="clickableRow">
                                                     <%= gridData[i].place; %>
                                                 </td>
-                                                <td>
+                                                <td class="clickableRow">
                                                     <%= gridData[i].diagCount; %>
                                                 </td>
                                                 <td>
-                                                    <i class="mdi mdi-pencil" style="cursor:pointer;" onclick='patientEdit(<%= gridData[i].patientId %>)'>
+                                                    <input type="hidden" id="patientIdRow" value="<%= gridData[i].patientId %>">
+                                                    <i class="mdi mdi-pencil edit" style="cursor:pointer;" onclick='patientEdit(<%= gridData[i].patientId %>)'>
                                                     </i>/
-                                                    <i class="mdi mdi-delete" style="cursor:pointer;" onclick="patientDelete(<%= gridData[i].patientId %>)">
+                                                    <i class="mdi mdi-delete delete" style="cursor:pointer;" onclick="patientDelete(<%= gridData[i].patientId %>)">
                                                     </i>
                                                 </td>
                                             </tr>
@@ -77,10 +82,16 @@
                                     <h5 class="card-title">Patient Info:-</h5>
                                     <div class="clearfix">&nbsp;</div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="" class="control-label">Patient No</label>
                                             <div class="form-group">
                                                 <input type="text" name="patientCode" id="patientCode" class="form-control" readonly value="PT/####">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="" class="control-label">Old No</label>
+                                            <div class="form-group">
+                                                <input type="text" name="patientCodeOld" id="patientCodeOld" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -89,7 +100,7 @@
                                                 <input type="text" name="patientName" id="patientName" class="form-control">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                             <label for="" class="control-label">Age </label>
                                             <div class="form-group">
                                                 <input type="text" name="age" id="age" class="form-control">
@@ -228,10 +239,13 @@
                                     </div>
                                     <div class="clearfix">&nbsp;</div>
                                     <div class="row">
+                                        <div class="col-md-1">
+                                            <input type="button" value="New Patient" id="btnNewPatient" name="btnNewPatient" class="btn btn-outline-secondary">
+                                        </div>
                                         <div class="col-md-10">
                                             &nbsp;
-                                        </div>
-                                        <div class="col-md-2">
+                                        </div>                                        
+                                        <div class="col-md-1">
                                             <input type="button" value="Add Diagnosis" id="btnSaveDiagnosis" name="btnSaveDiagnosis" class="btn btn-primary" style="float:right;">
                                         </div>
                                     </div>
@@ -252,6 +266,9 @@
                 });
                 $('#diagnosisDate').val(formattedDate(new Date()));
                 $('#data-table').DataTable();
+                if(window.location.href.indexOf('#new')>-1){
+                    $('#myTab a:first').tab('show');
+                }
             });
             $('#btnSave').click(function () {
                 if ($('#patientName').val() == "") {
@@ -337,7 +354,7 @@
                                             $('#medicineDetails').val('');
                                             $('#accupunctureChannel').val('');
                                             $('#status').val(0).trigger('change');
-                                            $('#btnSaveDiagnosis').html('Add Diagnosis');                                            
+                                            $('#btnSaveDiagnosis').val('Add Diagnosis');                                            
                                             updateDiagData();
                                         }
                                     });
@@ -357,7 +374,7 @@
                                             $('#medicineDetails').val('');
                                             $('#accupunctureChannel').val('');
                                             $('#status').val(0).trigger('change');
-                                            $('#btnSaveDiagnosis').html('Add Diagnosis');                                            
+                                            $('#btnSaveDiagnosis').val('Add Diagnosis');                                            
                                             updateDiagData();
                                         }
                                     });                                                            
@@ -375,6 +392,7 @@
                     }, function (resp) {                        
                         $('#patientId').val(resp[0][0].patientId);
                         $('#patientCode').val('PT/' + resp[0][0].patientCode);
+                        $('#patientCodeOld').val(resp[0][0].patientCodeOld);
                         $('#patientName').val(resp[0][0].patientName);
                         $('#age').val(resp[0][0].age);
                         $('#place').val(resp[0][0].place);
@@ -385,15 +403,16 @@
 
                         Object.keys(resp[1]).forEach((i)=>{
                             $('#diagData tbody').append(`<tr>
-                                                        <td>`+ (parseInt(i)+1) +`</td>
-                                                        <td>`+(resp[1][i].prefix+'/'+resp[1][i].diagnosisCode)+`</td>
-                                                        <td>`+formattedDate(new Date(resp[1][i].diagnosisDate))+`</td>
-                                                        <td>`+resp[1][i].diagnosisDetails+`</td>
-                                                        <td>`+resp[1][i].medicineDetails+`</td>
-                                                        <td>`+resp[1][i].accupunctureChannel+`</td>
-                                                        <td>`+(resp[1][i].fullName==null?"":resp[1][i].fullName)+`</td>
-                                                        <td>`+resp[1][i].status+`</td>
+                                                        <td class="clickableDiagRow">`+ (parseInt(i)+1) +`</td>
+                                                        <td class="clickableDiagRow">`+(resp[1][i].prefix+'/'+resp[1][i].diagnosisCode)+`</td>
+                                                        <td class="clickableDiagRow">`+formattedDate(new Date(resp[1][i].diagnosisDate))+`</td>
+                                                        <td class="clickableDiagRow">`+resp[1][i].diagnosisDetails+`</td>
+                                                        <td class="clickableDiagRow">`+resp[1][i].medicineDetails+`</td>
+                                                        <td class="clickableDiagRow">`+resp[1][i].accupunctureChannel+`</td>
+                                                        <td class="clickableDiagRow">`+(resp[1][i].fullName==null?"":resp[1][i].fullName)+`</td>
+                                                        <td class="clickableDiagRow">`+resp[1][i].status+`</td>
                                                         <td>
+                                                            <input type="hidden" id="diagnosisIdRow" value="`+resp[1][i].diagnosisId+`">
                                                             <i class="mdi mdi-pencil" style="cursor:pointer;" onclick='diagnosisEdit(`+resp[1][i].diagnosisId+`)'></i>/
                                                             <i class="mdi mdi-delete" style="cursor:pointer;" onclick="diagnosisDelete(`+resp[1][i].diagnosisId+`)"></i>
                                                         </td>
@@ -419,7 +438,7 @@
             }
             $('#navList').click(function () {
                 if ($('#patientId').val() > 0) {
-                    location.reload();
+                    location.replace('/diagnosis');
                 }
             });
             function patientDelete(patientId){
@@ -442,7 +461,7 @@
                                 showConfirmButton: false
                             });
                             setTimeout(function(){
-                                location.reload();
+                                location.replace('/diagnosis');
                             },1000);
                         });
                     }
@@ -491,15 +510,16 @@
                     Object.keys(resp[1]).forEach((i)=>{
                         $('#diagData tbody').append(
                         `<tr>
-                            <td>`+(parseInt(i)+1)+`</td>
-                            <td>`+(resp[1][i].prefix+'/'+resp[1][i].diagnosisCode)+`</td>
-                            <td>`+formattedDate(new Date(resp[1][i].diagnosisDate))+`</td>
-                            <td>`+resp[1][i].diagnosisDetails+`</td>
-                            <td>`+resp[1][i].medicineDetails+`</td>
-                            <td>`+resp[1][i].accupunctureChannel+`</td>
-                            <td>`+(resp[1][i].fullName==null?"":resp[1][i].fullName)+`</td>
-                            <td>`+resp[1][i].status+`</td>
+                            <td class="clickableDiagRow">`+(parseInt(i)+1)+`</td>
+                            <td class="clickableDiagRow">`+(resp[1][i].prefix+'/'+resp[1][i].diagnosisCode)+`</td>
+                            <td class="clickableDiagRow">`+formattedDate(new Date(resp[1][i].diagnosisDate))+`</td>
+                            <td class="clickableDiagRow">`+resp[1][i].diagnosisDetails+`</td>
+                            <td class="clickableDiagRow">`+resp[1][i].medicineDetails+`</td>
+                            <td class="clickableDiagRow">`+resp[1][i].accupunctureChannel+`</td>
+                            <td class="clickableDiagRow">`+(resp[1][i].fullName==null?"":resp[1][i].fullName)+`</td>
+                            <td class="clickableDiagRow">`+resp[1][i].status+`</td>
                             <td>
+                                <input type="hidden" id="diagnosisIdRow" value="`+resp[1][i].diagnosisId+`">
                                 <i class="mdi mdi-pencil" style="cursor:pointer;" onclick='diagnosisEdit(`+resp[1][i].diagnosisId+`)'></i>/
                                 <i class="mdi mdi-delete" style="cursor:pointer;" onclick="diagnosisDelete(`+resp[1][i].diagnosisId+`)"></i>
                             </td>
@@ -507,6 +527,19 @@
                     });
                 });                                
             }
+            $('#btnNewPatient').click(function(){
+                if(window.location.href.indexOf('#new')<=-1){
+                    location.replace('diagnosis/#new');
+                }                
+                else if(window.location.href.indexOf('#new')>0)
+                    location.reload();
+            });
+            $('.clickableRow').click(function(){
+                patientEdit($(this).closest('tr').find('#patientIdRow').val());
+            });
+            $('.clickableDiagRow').click(function(){
+                alert('sdfsd');
+            });
         </script>
         </body>
 

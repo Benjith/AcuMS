@@ -16,7 +16,7 @@ module.exports = (app) => {
                 if (Object.keys(result).length > 0)
                     statSelect = result;
             });
-            db_conn.conn.query(`select t1.patientId,t1.companyId,t1.patientCode,t1.patientName,t1.mobile,t1.age,t1.place,t1.address,t1.email,count(t2.diagnosisId)as diagCount 
+            db_conn.conn.query(`select t1.patientId,t1.companyId,t1.patientCode,t1.patientName,t1.mobile,t1.age,t1.place,t1.address,t1.email,count(t2.diagnosisId)as diagCount, t1.patientCodeOld 
                     from patient_tbl t1 left join diagnosis_tbl t2 on t1.patientId=t2.patientId             
                     group by t1.patientId
                     order by t1.patientId DESC`, (err, result) => {
@@ -43,7 +43,7 @@ module.exports = (app) => {
                 db_conn.conn.query('select max(cast(patientCode as int))as patientCode from patient_tbl', (err, result) => {
                     if (err) throw err;
                     patientCode = parseInt(result[0].patientCode == null ? 0 : result[0].patientCode) + 1;
-                    db_conn.conn.query('insert into patient_tbl(companyId,patientCode,patientName,mobile,age,place,address,email)values(?,?,?,?,?,?,?,?)', [req.session.__companyId, patientCode, info.patientName, info.mobile, info.age, info.place, info.address, info.email], (err, result) => {
+                    db_conn.conn.query('insert into patient_tbl(companyId,patientCode,patientName,mobile,age,place,address,email,patientCodeOld)values(?,?,?,?,?,?,?,?,?)', [req.session.__companyId, patientCode, info.patientName, info.mobile, info.age, info.place, info.address, info.email, info.patientCodeOld], (err, result) => {
                         if (err) throw err;
                         db_conn.conn.query('select * from patient_tbl where patientId=?', [result.insertId], (err, result) => {
                             if (err) throw err;
@@ -53,7 +53,7 @@ module.exports = (app) => {
                     });
                 });
             } else if (info.patientId > 0) {
-                db_conn.conn.query('update patient_tbl set patientName=?, mobile=?,age=?,place=?,address=?,email=? where patientId=?', [info.patientName, info.mobile, info.age, info.place, info.address, info.email, info.patientId], (err, result) => {
+                db_conn.conn.query('update patient_tbl set patientName=?, mobile=?,age=?,place=?,address=?,email=?,patientCodeOld=? where patientId=?', [info.patientName, info.mobile, info.age, info.place, info.address, info.email, info.patientCodeOld, info.patientId], (err, result) => {
                     if (err) throw err;
                     res.json('updated');
                     db_conn.conn.end();
